@@ -8,10 +8,11 @@ import com.golozhopikistudio.schoolprojectapplication.domain.result.BorrowResult
 import com.golozhopikistudio.schoolprojectapplication.domain.result.ReturnResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -19,64 +20,51 @@ class DetailsViewModel(
     private val repository: LibraryRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(DetailsUiState())
-    val state: StateFlow<DetailsUiState> = _state.asStateFlow()
+    private val selectedBookId = MutableStateFlow<String?>(null)
+
+    val state: StateFlow<DetailsUiState> =
+        combine(repository.state, selectedBookId) { appState, bookId ->
+            DetailsUiState(book = appState.books.find { it.id == bookId })
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = DetailsUiState()
+        )
 
     private val _effect = MutableSharedFlow<DetailsEffect>()
-    val effect: SharedFlow<DetailsEffect> = _effect.asSharedFlow()
+    val effect = _effect.asSharedFlow()
 
-    fun load(bookId: String) = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
-
-        runCatching { repository.getBook(bookId) }
-            .onSuccess { book ->
-                _state.update { it.copy(book = book, isLoading = false) }
-            }
-            .onFailure {
-                _state.update { it.copy(isLoading = false, error = "Ошибка загрузки") }
-            }
+    fun load(bookId: String) {
+        selectedBookId.update { bookId }
     }
 
     fun borrow() = viewModelScope.launch {
-        val book = state.value.book ?: return@launch
-        _state.update { it.copy(actionLoading = true) }
-
-        val result = repository.borrow(book)
-
-        _state.update { it.copy(actionLoading = false) }
-
-        when (result) {
-            is BorrowResult.Success ->
-                _effect.emit(DetailsEffect.ShowToast("Книга выдана"))
-
-            is BorrowResult.Error ->
-                _effect.emit(DetailsEffect.ShowToast(result.message))
+        val bookId = selectedBookId.value ?: return@launch
+        when (repository.borrow(bookId)) {
+            BorrowResult.Success -> _effect.emit(DetailsEffect.ShowToast("Книга выдана"))
+            BorrowResult.NotFound -> _effect.emit(DetailsEffect.ShowToast("Книга не найдена"))
+            BorrowResult.AlreadyBorrowed -> _effect.emit(DetailsEffect.ShowToast("Книга уже выдана"))
+            BorrowResult.NotAllowed -> _effect.emit(DetailsEffect.ShowToast("Нет активного пользователя"))
         }
     }
 
     fun returnBook() = viewModelScope.launch {
-        val book = state.value.book ?: return@launch
-        val result = repository.returnBook(book)
-
-        when (result) {
-            is ReturnResult.Success ->
-                _effect.emit(DetailsEffect.ShowToast("Книга возвращена"))
-
-            is ReturnResult.Error ->
-                _effect.emit(DetailsEffect.ShowToast(result.message))
+        val bookId = selectedBookId.value ?: return@launch
+        when (repository.returnBook(bookId)) {
+            ReturnResult.Success -> _effect.emit(DetailsEffect.ShowToast("Книга возвращена"))
+            ReturnResult.NotFound -> _effect.emit(DetailsEffect.ShowToast("Книга не найдена"))
+            ReturnResult.NotBorrowed -> _effect.emit(DetailsEffect.ShowToast("Книга уже в библиотеке"))
+            ReturnResult.NotAllowed -> _effect.emit(DetailsEffect.ShowToast("Книгу выдал другой пользователь"))
         }
     }
 }
 
 
 data class DetailsUiState(
-    val book: Book? = null,
-    val isLoading: Boolean = false,
-    val actionLoading: Boolean = false,
-    val error: String? = null
+    val book: Book? = null
 )
 
 sealed interface DetailsEffect {
     data class ShowToast(val message: String) : DetailsEffect
-    data object CloseScreen : DetailsEffect
+
 }

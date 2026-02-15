@@ -1,31 +1,24 @@
 package com.golozhopikistudio.schoolprojectapplication.features.journal
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
 import com.golozhopikistudio.schoolprojectapplication.domain.model.HistoryItem
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 
-class JournalViewModel(
-    private val repository: LibraryRepository
-) : ViewModel() {
+class JournalViewModel(repository: LibraryRepository) : ViewModel() {
 
-    private val _state = MutableStateFlow(JournalUiState())
-    val state: StateFlow<JournalUiState> = _state.asStateFlow()
-
-    fun load() {
-        _state.update {
-            it.copy(history = repository.getHistory())
-        }
-    }
-
-    fun clear() {
-        repository.clearHistory()
-        load()
-    }
+    val state: StateFlow<JournalUiState> = repository.state.map {
+        JournalUiState(history = it.history)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = JournalUiState()
+    )
 }
 
 data class JournalUiState(

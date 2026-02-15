@@ -3,6 +3,7 @@ package com.golozhopikistudio.schoolprojectapplication.features.apiImport
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
+import com.golozhopikistudio.schoolprojectapplication.domain.result.ImportResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,16 +20,17 @@ class ImportViewModel(
     fun import(query: String) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true, error = null) }
 
-        runCatching { repository.importFromApi(query) }
-            .onSuccess { count ->
-                _state.update { it.copy(isLoading = false, importedCount = count) }
+        when (val result = repository.importFromOpenLibrary(query)) {
+            is ImportResult.Success -> {
+                _state.update { it.copy(isLoading = false, importedCount = result.importedCount) }
             }
-            .onFailure {
-                _state.update { it.copy(isLoading = false, error = "Ошибка импорта") }
+
+            is ImportResult.Error -> {
+                _state.update { it.copy(isLoading = false, error = result.message) }
             }
+        }
     }
 }
-
 data class ImportUiState(
     val isLoading: Boolean = false,
     val importedCount: Int = 0,
