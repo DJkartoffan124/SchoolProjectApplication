@@ -41,16 +41,29 @@ fun BookDetailsScreen(
         }
     }
 
+    val book = uiState.book
+    val borrowedByOther = book?.isBorrowed == true && book.borrowerId != uiState.activeUserId
+    val borrowedByCurrent = book?.isBorrowed == true && book.borrowerId == uiState.activeUserId
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(text = uiState.book?.title ?: "Книга не найдена")
-        Text(text = uiState.book?.author ?: "")
-        Button(onClick = viewModel::borrow) { Text("Выдать") }
-        Button(onClick = viewModel::returnBook) { Text("Вернуть") }
+        Text(text = book?.title ?: "Книга не найдена")
+        Text(text = book?.author ?: "")
+        if (borrowedByOther) {
+            Text(text = "Выдана другому")
+        }
+        Button(
+            onClick = viewModel::borrow,
+            enabled = book != null && !book.isBorrowed
+        ) { Text("Выдать") }
+        Button(
+            onClick = viewModel::returnBook,
+            enabled = borrowedByCurrent
+        ) { Text("Вернуть") }
         Button(onClick = onBack) { Text("Назад") }
     }
 }

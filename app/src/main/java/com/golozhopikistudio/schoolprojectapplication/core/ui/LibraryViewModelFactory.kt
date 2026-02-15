@@ -1,4 +1,4 @@
-package com.golozhopikistudio.schoolprojectapplication
+package com.golozhopikistudio.schoolprojectapplication.core.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

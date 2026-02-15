@@ -21,10 +21,10 @@ class DetailsViewModel(
 ) : ViewModel() {
 
     private val selectedBookId = MutableStateFlow<String?>(null)
-
     val state: StateFlow<DetailsUiState> =
         combine(repository.state, selectedBookId) { appState, bookId ->
-            DetailsUiState(book = appState.books.find { it.id == bookId })
+            val book = appState.books.find { it.id == bookId }
+            DetailsUiState(book = book, activeUserId = appState.activeUserId)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -61,7 +61,8 @@ class DetailsViewModel(
 
 
 data class DetailsUiState(
-    val book: Book? = null
+    val book: Book? = null,
+    val activeUserId: String? = null
 )
 
 sealed interface DetailsEffect {

@@ -5,13 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.remember
-import androidx.navigation.compose.rememberNavController
+import com.golozhopikistudio.schoolprojectapplication.core.ui.LibraryViewModelFactory
 import com.golozhopikistudio.schoolprojectapplication.core.ui.theme.SchoolProjectApplicationTheme
 import com.golozhopikistudio.schoolprojectapplication.data.local.JsonStore
 import com.golozhopikistudio.schoolprojectapplication.data.remote.RetrofitFactory
 import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepositoryImpl
 import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
-import com.golozhopikistudio.schoolprojectapplication.navigation.AppNavGraph
+import com.golozhopikistudio.schoolprojectapplication.navigation.AppRoot
 
 class MainActivity : ComponentActivity() {
 
@@ -23,20 +23,17 @@ class MainActivity : ComponentActivity() {
             jsonStore = JsonStore(this),
             api = RetrofitFactory.createOpenLibraryApi()
         )
-        repository.setActiveUser(name = "Reader", role = Role.READER)
+
+        if (repository.state.value.activeUserId == null) {
+            repository.setActiveUser(name = "Reader", role = Role.READER)
+        }
 
         setContent {
-            val navController = rememberNavController()
             val factory = remember { LibraryViewModelFactory(repository) }
 
-
-                SchoolProjectApplicationTheme {
-                    AppNavGraph(
-                        navController = navController,
-                        viewModelFactory = factory
-                    )
-                }
-
+            SchoolProjectApplicationTheme {
+                AppRoot(viewModelFactory = factory)
             }
         }
     }
+}

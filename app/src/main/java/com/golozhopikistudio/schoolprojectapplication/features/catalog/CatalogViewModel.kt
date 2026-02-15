@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class CatalogViewModel(repository: LibraryRepository) : ViewModel() {
+class CatalogViewModel(private val repository: LibraryRepository) : ViewModel() {
 
     private val query = MutableStateFlow("")
     val state: StateFlow<CatalogUiState> =
@@ -34,11 +34,16 @@ class CatalogViewModel(repository: LibraryRepository) : ViewModel() {
         query.update { value }
     }
 
+    fun addManualBook(title: String, author: String) {
+        val normalizedTitle = title.trim()
+        val normalizedAuthor = author.trim()
+        if (normalizedTitle.isBlank() || normalizedAuthor.isBlank()) return
+        repository.addManualBook(title = normalizedTitle, author = normalizedAuthor)
+    }
+
 }
 
 data class CatalogUiState(
     val query: String = "",
     val books: List<Book> = emptyList()
 )
-
-

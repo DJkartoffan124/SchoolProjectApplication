@@ -67,9 +67,10 @@ class LibraryRepositoryImpl(
         if (book.isBorrowed) return BorrowResult.AlreadyBorrowed
 
         val updatedBook = book.copy(isBorrowed = true, borrowerId = activeUserId)
+        val user = current.users.find { it.id == activeUserId }
         val historyItem = HistoryItem(
             time = System.currentTimeMillis(),
-            message = "User $activeUserId borrowed '${book.title}'"
+            message = "${user?.name ?: "Пользователь"} выдал(а) «${book.title}»"
         )
 
         updateState(
@@ -91,9 +92,10 @@ class LibraryRepositoryImpl(
         if (book.borrowerId != activeUserId) return ReturnResult.NotAllowed
 
         val updatedBook = book.copy(isBorrowed = false, borrowerId = null)
+        val user = current.users.find { it.id == activeUserId }
         val historyItem = HistoryItem(
             time = System.currentTimeMillis(),
-            message = "User $activeUserId returned '${book.title}'"
+            message = "${user?.name ?: "Пользователь"} вернул(а) «${book.title}»"
         )
 
         updateState(

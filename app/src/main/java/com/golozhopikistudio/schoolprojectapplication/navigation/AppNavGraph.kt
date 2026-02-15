@@ -1,6 +1,9 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -25,11 +28,13 @@ import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileVi
 fun AppNavGraph(
     navController: NavHostController,
     viewModelFactory: ViewModelProvider.Factory,
-    startDestination: String = Route.Catalog.path
+    startDestination: String = Route.Catalog.path,
+    contentPadding: PaddingValues = PaddingValues()
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        modifier = Modifier.padding(contentPadding)
     ) {
         composable(Route.Catalog.path) {
             val vm: CatalogViewModel = viewModel(factory = viewModelFactory)
