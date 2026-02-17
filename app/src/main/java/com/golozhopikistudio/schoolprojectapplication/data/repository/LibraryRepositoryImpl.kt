@@ -129,4 +129,12 @@ class LibraryRepositoryImpl(
 
         return ImportResult.Success(uniqueBooks.size)
     }
+
+    override suspend fun deleteBook(bookId: String) {
+        val current = state.value
+        val updatedBooks = current.books.filterNot { it.id == bookId }
+        if (updatedBooks.size == current.books.size) return
+
+        updateState(current.copy(books = updatedBooks))
+    }
 }

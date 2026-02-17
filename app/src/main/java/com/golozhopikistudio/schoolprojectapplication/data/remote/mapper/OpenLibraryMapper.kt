@@ -4,8 +4,8 @@ import com.golozhopikistudio.schoolprojectapplication.data.remote.dto.OpenLibrar
 import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
 import java.util.UUID
 
-private fun coverUrl(coverId: Int, size: String = "M"): String =
-    "https://covers.openlibrary.org/b/id/$coverId-$size.jpg"
+private fun coverUrl(coverId: Int): String =
+    "https://covers.openlibrary.org/b/id/$coverId-L.jpg"
 
 fun OpenLibraryDocDto.toDomainBook(): Book {
     val safeTitle = title?.takeIf { it.isNotBlank() } ?: "Untitled"
