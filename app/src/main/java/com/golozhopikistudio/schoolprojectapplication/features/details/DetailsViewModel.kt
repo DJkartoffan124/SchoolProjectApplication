@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
 import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
+import com.golozhopikistudio.schoolprojectapplication.domain.result.BorrowResult
+import com.golozhopikistudio.schoolprojectapplication.domain.result.ReturnResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +36,8 @@ class DetailsViewModel(
                 book = book,
                 isLoading = bookId == null,
                 errorMessage = error,
-                emptyMessage = emptyMessage
+                emptyMessage = emptyMessage,
+                activeUserId = appState.activeUserId
             )
         }.stateIn(
             scope = viewModelScope,
@@ -52,7 +55,29 @@ class DetailsViewModel(
 
     fun onAction(action: DetailsAction) {
         when (action) {
+            DetailsAction.BorrowClicked -> borrow()
             DetailsAction.DeleteClicked -> deleteBook()
+            DetailsAction.ReturnClicked -> returnBook()
+        }
+    }
+
+    private fun borrow() = viewModelScope.launch {
+        val bookId = selectedBookId.value ?: return@launch
+        when (repository.borrow(bookId)) {
+            BorrowResult.Success -> _effect.emit(DetailsEffect.ShowToast("Книга выдана"))
+            BorrowResult.NotFound -> _effect.emit(DetailsEffect.ShowToast("Книга не найдена"))
+            BorrowResult.AlreadyBorrowed -> _effect.emit(DetailsEffect.ShowToast("Книга уже выдана"))
+            BorrowResult.NotAllowed -> _effect.emit(DetailsEffect.ShowToast("Нет активного пользователя"))
+        }
+    }
+
+    private fun returnBook() = viewModelScope.launch {
+        val bookId = selectedBookId.value ?: return@launch
+        when (repository.returnBook(bookId)) {
+            ReturnResult.Success -> _effect.emit(DetailsEffect.ShowToast("Книга возвращена"))
+            ReturnResult.NotFound -> _effect.emit(DetailsEffect.ShowToast("Книга не найдена"))
+            ReturnResult.NotBorrowed -> _effect.emit(DetailsEffect.ShowToast("Книга уже в библиотеке"))
+            ReturnResult.NotAllowed -> _effect.emit(DetailsEffect.ShowToast("Книгу выдал другой пользователь"))
         }
     }
 
@@ -76,7 +101,8 @@ data class DetailsUiState(
     val book: Book? = null,
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
-    val emptyMessage: String? = null
+    val emptyMessage: String? = null,
+    val activeUserId: String? = null
 )
 
 sealed interface DetailsEffect {
@@ -85,5 +111,7 @@ sealed interface DetailsEffect {
 }
 
 sealed interface DetailsAction {
+    data object BorrowClicked : DetailsAction
     data object DeleteClicked : DetailsAction
+    data object ReturnClicked : DetailsAction
 }

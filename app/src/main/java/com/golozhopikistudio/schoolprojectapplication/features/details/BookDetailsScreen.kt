@@ -22,8 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -60,6 +58,8 @@ fun BookDetailsScreen(
 
     var showDeleteConfirmation by remember { mutableStateOf(false) }
     val book = uiState.book
+    val borrowedByOther = book?.isBorrowed == true && book.borrowerId != uiState.activeUserId
+    val borrowedByCurrent = book?.isBorrowed == true && book.borrowerId == uiState.activeUserId
 
     if (showDeleteConfirmation) {
         AlertDialog(
@@ -102,7 +102,7 @@ fun BookDetailsScreen(
 
             uiState.errorMessage != null -> {
                 Text(
-                    text = uiState.errorMessage as String,
+                    text = uiState.errorMessage!!,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.error
                 )
@@ -110,25 +110,13 @@ fun BookDetailsScreen(
 
             uiState.emptyMessage != null -> {
                 Text(
-                    text = uiState.emptyMessage as String,
+                    text = uiState.emptyMessage!!,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
             book != null -> {
-
-                AsyncImage(
-                    model = book.coverUrl,
-                    contentDescription = book.title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(220.dp),
-                    contentScale = ContentScale.Crop,
-                    placeholder = ColorPainter(Color.LightGray),
-                    error = ColorPainter(Color.LightGray)
-                )
-
                 Text(
                     text = book.title,
                     style = MaterialTheme.typography.headlineSmall,
@@ -142,12 +130,23 @@ fun BookDetailsScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                if (book.coverUrl != null) {
-                    Text(
-                        text = "Источник: ${book.coverUrl}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onBackground
+                val url = book.coverUrl
+
+                if (!url.isNullOrBlank()) {
+                    AsyncImage(
+                        model = url,
+                        contentDescription = "Обложка книги",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(240.dp),
+                        contentScale = ContentScale.Crop
                     )
+                    Text(
+                        text = "Источник: $url",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                } else {
+                    Text("Обложка отсутствует")
                 }
 
                 Text(
@@ -155,6 +154,30 @@ fun BookDetailsScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
+
+                if (borrowedByOther) {
+                    Text(
+                        text = "Выдана другому пользователю",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
+                Button(
+                    onClick = { viewModel.onAction(DetailsAction.BorrowClicked) },
+                    enabled = !book.isBorrowed,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Выдать")
+                }
+
+                OutlinedButton(
+                    onClick = { viewModel.onAction(DetailsAction.ReturnClicked) },
+                    enabled = borrowedByCurrent,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Вернуть")
+                }
             }
         }
 

@@ -43,9 +43,8 @@ fun CatalogScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                ,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             SearchBar(query = uiState.query, onQueryChange = viewModel::onQueryChange)
