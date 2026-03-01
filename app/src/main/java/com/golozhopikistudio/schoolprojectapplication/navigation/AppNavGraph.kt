@@ -23,7 +23,6 @@ import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksSc
 import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksViewModel
 import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileScreen
 import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileViewModel
-
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
@@ -40,7 +39,12 @@ fun AppNavGraph(
             val vm: CatalogViewModel = viewModel(factory = viewModelFactory)
             CatalogScreen(
                 onOpenDetails = { bookId ->
-                    navController.navigate(Route.Details.create(bookId))
+                    navController.navigate(
+                        Route.Details.create(
+                            bookId = bookId,
+                            source = Route.DetailsSource.Catalog
+                        )
+                    )
                 },
                 viewModel = vm
             )
@@ -49,50 +53,25 @@ fun AppNavGraph(
         composable(
             route = Route.Details.path,
             arguments = listOf(
-                navArgument(Route.Details.ARG_BOOK_ID) { type = NavType.StringType }
+                navArgument(Route.Details.ARG_BOOK_ID) { type = NavType.StringType },
+                navArgument(Route.Details.ARG_SOURCE) { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments?.getString(Route.Details.ARG_BOOK_ID)!!
+            val source = backStackEntry.arguments?.getString(Route.Details.ARG_SOURCE)!!
+            val sourceRoute = if (source == Route.DetailsSource.MyBooks) Route.MyBooks.path else Route.Catalog.path
 
             val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
             BookDetailsScreen(
                 bookId = bookId,
-                onBack = { navController.popBackStack() },
-                viewModel = vm
-            )
-        }
-
-        composable(
-            route = Route.MyBookDetails.path,
-            arguments = listOf(
-                navArgument(Route.MyBookDetails.ARG_BOOK_ID) { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val bookId = backStackEntry.arguments?.getString(Route.MyBookDetails.ARG_BOOK_ID)!!
-
-            val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
-            BookDetailsScreen(
-                bookId = bookId,
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    navController.navigate(sourceRoute) {
+                        popUpTo(Route.Details.path) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
                 viewModel = vm,
-                showDeleteButton = false
-            )
-        }
-
-        composable(
-            route = Route.MyBookDetails.path,
-            arguments = listOf(
-                navArgument(Route.MyBookDetails.ARG_BOOK_ID) { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
-            val bookId = backStackEntry.arguments?.getString(Route.MyBookDetails.ARG_BOOK_ID)!!
-
-            val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
-            BookDetailsScreen(
-                bookId = bookId,
-                onBack = { navController.popBackStack() },
-                viewModel = vm,
-                showDeleteButton = false
+                showDeleteButton = source == Route.DetailsSource.Catalog
             )
         }
 
@@ -101,7 +80,12 @@ fun AppNavGraph(
             MyBooksScreen(
                 viewModel = vm,
                 onOpenDetails = { bookId ->
-                    navController.navigate(Route.MyBookDetails.create(bookId))
+                    navController.navigate(
+                        Route.Details.create(
+                            bookId = bookId,
+                            source = Route.DetailsSource.MyBooks
+                        )
+                    )
                 }
             )
         }
