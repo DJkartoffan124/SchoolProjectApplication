@@ -126,6 +126,18 @@ class LibraryRepositoryImpl(
             }
             .take(limit)
 
+        val historyItem = HistoryItem(
+            time = System.currentTimeMillis(),
+            message = "Импортировано ${uniqueBooks.size} книг по запросу \"$query\""
+        )
+
+        updateState(
+            current.copy(
+                books = current.books + uniqueBooks,
+                history = current.history + historyItem
+            )
+        )
+
         updateState(current.copy(books = current.books + uniqueBooks))
 
         return ImportResult.Success(uniqueBooks.size)

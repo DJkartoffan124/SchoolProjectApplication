@@ -65,9 +65,10 @@ fun AppNavGraph(
             BookDetailsScreen(
                 bookId = bookId,
                 onBack = {
-                    navController.navigate(sourceRoute) {
-                        popUpTo(Route.Details.path) { inclusive = true }
-                        launchSingleTop = true
+                    if (!navController.popBackStack()) {
+                        navController.navigate(sourceRoute) {
+                            launchSingleTop = true
+                        }
                     }
                 },
                 viewModel = vm,
