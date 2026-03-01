@@ -16,23 +16,34 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val currentRoute = currentDestination?.route
     val tabs = listOf(Route.Catalog, Route.MyBooks, Route.Import, Route.Journal, Route.Profile)
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 tabs.forEach { route ->
-                    val isSelected = currentDestination
-                        ?.hierarchy
-                        ?.any { it.route == route.path } == true
+                    val isSelected = if (route == Route.MyBooks) {
+                        currentDestination
+                            ?.hierarchy
+                            ?.any { it.route == Route.MyBooks.path || it.route == Route.MyBookDetails.path } == true
+                    } else {
+                        currentDestination
+                            ?.hierarchy
+                            ?.any { it.route == route.path } == true
+                    }
 
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
-                            navController.navigate(route.path) {
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
+                            if (route == Route.MyBooks && currentRoute == Route.MyBookDetails.path) {
+                                navController.popBackStack()
+                            } else {
+                                navController.navigate(route.path) {
+                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         },
                         icon = { Text(route.label.take(1)) },

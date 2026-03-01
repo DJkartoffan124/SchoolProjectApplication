@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -32,7 +35,8 @@ import coil.compose.AsyncImage
 fun BookDetailsScreen(
     bookId: String,
     onBack: () -> Unit,
-    viewModel: DetailsViewModel
+    viewModel: DetailsViewModel,
+    showDeleteButton: Boolean = true
 ) {
     val context = LocalContext.current
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -61,7 +65,7 @@ fun BookDetailsScreen(
     val borrowedByOther = book?.isBorrowed == true && book.borrowerId != uiState.activeUserId
     val borrowedByCurrent = book?.isBorrowed == true && book.borrowerId == uiState.activeUserId
 
-    if (showDeleteConfirmation) {
+    if (showDeleteButton && showDeleteConfirmation) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
             title = { Text("Удалить книгу?") },
@@ -87,6 +91,7 @@ fun BookDetailsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -120,7 +125,9 @@ fun BookDetailsScreen(
                 Text(
                     text = book.title,
                     style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = book.author,
@@ -138,7 +145,7 @@ fun BookDetailsScreen(
                         contentDescription = "Обложка книги",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(240.dp),
+                            .height(180.dp),
                         contentScale = ContentScale.Crop
                     )
                     Text(
@@ -183,13 +190,16 @@ fun BookDetailsScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = { showDeleteConfirmation = true },
-            enabled = book != null,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Удалить книгу")
+        if (showDeleteButton) {
+            Button(
+                onClick = { showDeleteConfirmation = true },
+                enabled = book != null,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Удалить книгу")
+            }
         }
+
         OutlinedButton(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth()

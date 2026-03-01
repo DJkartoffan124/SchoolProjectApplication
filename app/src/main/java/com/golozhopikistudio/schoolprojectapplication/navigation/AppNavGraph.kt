@@ -62,9 +62,48 @@ fun AppNavGraph(
             )
         }
 
+        composable(
+            route = Route.MyBookDetails.path,
+            arguments = listOf(
+                navArgument(Route.MyBookDetails.ARG_BOOK_ID) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val bookId = backStackEntry.arguments?.getString(Route.MyBookDetails.ARG_BOOK_ID)!!
+
+            val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
+            BookDetailsScreen(
+                bookId = bookId,
+                onBack = { navController.popBackStack() },
+                viewModel = vm,
+                showDeleteButton = false
+            )
+        }
+
+        composable(
+            route = Route.MyBookDetails.path,
+            arguments = listOf(
+                navArgument(Route.MyBookDetails.ARG_BOOK_ID) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val bookId = backStackEntry.arguments?.getString(Route.MyBookDetails.ARG_BOOK_ID)!!
+
+            val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
+            BookDetailsScreen(
+                bookId = bookId,
+                onBack = { navController.popBackStack() },
+                viewModel = vm,
+                showDeleteButton = false
+            )
+        }
+
         composable(Route.MyBooks.path) {
             val vm: MyBooksViewModel = viewModel(factory = viewModelFactory)
-            MyBooksScreen(viewModel = vm)
+            MyBooksScreen(
+                viewModel = vm,
+                onOpenDetails = { bookId ->
+                    navController.navigate(Route.MyBookDetails.create(bookId))
+                }
+            )
         }
         composable(Route.Journal.path) {
             val vm: JournalViewModel = viewModel(factory = viewModelFactory)
