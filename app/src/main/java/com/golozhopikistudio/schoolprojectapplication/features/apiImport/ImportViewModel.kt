@@ -17,12 +17,23 @@ class ImportViewModel(
     private val _state = MutableStateFlow(ImportUiState())
     val state: StateFlow<ImportUiState> = _state.asStateFlow()
 
-    fun import(query: String) = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true, error = null) }
+    fun import(query: String, requestedCount: Int) = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true, error = null, snackbarMessage = null) }
 
-        when (val result = repository.importFromOpenLibrary(query)) {
+        when (val result = repository.importFromOpenLibrary(query, requestedCount)) {
             is ImportResult.Success -> {
-                _state.update { it.copy(isLoading = false, importedCount = result.importedCount) }
+                val snackbarMessage = if (result.importedCount < requestedCount) {
+                    "Импортировано ${result.importedCount} из $requestedCount книг"
+                } else {
+                    null
+                }
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        importedCount = result.importedCount,
+                        snackbarMessage = snackbarMessage
+                    )
+                }
             }
 
             is ImportResult.Error -> {
@@ -30,9 +41,15 @@ class ImportViewModel(
             }
         }
     }
+
+    fun consumeSnackbar() {
+        _state.update { it.copy(snackbarMessage = null) }
+    }
 }
+
 data class ImportUiState(
     val isLoading: Boolean = false,
     val importedCount: Int = 0,
-    val error: String? = null
+    val error: String? = null,
+    val snackbarMessage: String? = null
 )

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -27,11 +29,16 @@ fun ImportScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
+    var requestedCountText by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(uiState.importedCount) {
-        if (uiState.importedCount > 0) {
-            snackbarHostState.showSnackbar("Импортировано книг: ${uiState.importedCount}")
+    val requestedCount = requestedCountText.toIntOrNull()
+    val isCountValid = requestedCount != null && requestedCount >= 1
+
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.consumeSnackbar()
         }
     }
 
@@ -48,9 +55,24 @@ fun ImportScreen(
                 onValueChange = { query = it },
                 label = { Text("Запрос") }
             )
+
+            OutlinedTextField(
+                value = requestedCountText,
+                onValueChange = { requestedCountText = it },
+                label = { Text("Сколько книг импортировать") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                isError = requestedCountText.isNotBlank() && !isCountValid,
+                supportingText = {
+                    if (requestedCountText.isNotBlank() && !isCountValid) {
+                        Text("Введите целое число не меньше 1")
+                    }
+                },
+                singleLine = true
+            )
+
             Button(
-                onClick = { viewModel.import(query) },
-                enabled = query.isNotBlank() && !uiState.isLoading
+                onClick = { viewModel.import(query, requestedCount!!) },
+                enabled = query.isNotBlank() && isCountValid && !uiState.isLoading
             ) {
                 Text("Импорт")
             }

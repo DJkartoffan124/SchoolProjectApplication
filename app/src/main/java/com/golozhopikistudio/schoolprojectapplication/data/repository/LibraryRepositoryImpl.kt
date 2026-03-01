@@ -108,7 +108,7 @@ class LibraryRepositoryImpl(
         return ReturnResult.Success
     }
 
-    override suspend fun importFromOpenLibrary(query: String): ImportResult {
+    override suspend fun importFromOpenLibrary(query: String, limit: Int): ImportResult {
         val current = state.value
         val importedBooks = try {
             api.search(query).docs.map { it.toDomainBook() }
@@ -124,6 +124,7 @@ class LibraryRepositoryImpl(
                 val key = "${it.title.lowercase()}::${it.author.lowercase()}"
                 key in existingKeys
             }
+            .take(limit)
 
         updateState(current.copy(books = current.books + uniqueBooks))
 

@@ -14,7 +14,10 @@ class ProfileViewModel(private val repository: LibraryRepository) : ViewModel() 
 
     val state: StateFlow<ProfileUiState> = repository.state.map { appState ->
         val activeUser = appState.users.find { it.id == appState.activeUserId }
-        ProfileUiState(user = activeUser)
+        ProfileUiState(
+            user = activeUser,
+            users = appState.users
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -25,9 +28,14 @@ class ProfileViewModel(private val repository: LibraryRepository) : ViewModel() 
         if (name.isBlank()) return
         repository.setActiveUser(name.trim(), role)
     }
+
+    fun setActiveUser(user: User) {
+        repository.setActiveUser(user.name, user.role)
+    }
 }
 
 
 data class ProfileUiState(
-    val user: User? = null
+    val user: User? = null,
+    val users: List<User> = emptyList()
 )

@@ -16,44 +16,28 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val detailsSource = navBackStackEntry?.arguments?.getString(Route.Details.ARG_SOURCE)
     val tabs = listOf(Route.Catalog, Route.MyBooks, Route.Import, Route.Journal, Route.Profile)
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 tabs.forEach { route ->
-                    val isSelected = when (route) {
-                        Route.MyBooks -> {
-                            currentDestination
-                                ?.hierarchy
-                                ?.any { destinationRoute ->
-                                    destinationRoute.route == Route.MyBooks.path ||
-                                            (destinationRoute.route == Route.Details.path && detailsSource == Route.DetailsSource.MyBooks)
-                                } == true
-                        }
-                        Route.Catalog -> {
-                            currentDestination
-                                ?.hierarchy
-                                ?.any { destinationRoute ->
-                                    destinationRoute.route == Route.Catalog.path ||
-                                            (destinationRoute.route == Route.Details.path && detailsSource == Route.DetailsSource.Catalog)
-                                } == true
-                        }
-                        else -> {
-                            currentDestination
-                                ?.hierarchy
-                                ?.any { it.route == route.path } == true
-                        }
-                    }
+                    val isSelected = currentDestination
+                        ?.hierarchy
+                        ?.any { it.route == route.path } == true
 
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
+                            val isOnDetails = currentDestination?.route == Route.Details.path
                             navController.navigate(route.path) {
-                                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                if (isOnDetails) {
+                                    popUpTo(Route.Details.path) { inclusive = true }
+                                } else {
+                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                    restoreState = true
+                                }
                                 launchSingleTop = true
-                                restoreState = true
                             }
                         },
                         icon = { Text(route.label.take(1)) },
