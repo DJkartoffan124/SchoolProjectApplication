@@ -1,6 +1,5 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
-import android.util.Log
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -30,16 +29,13 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
-                            Log.println(Log.WARN, "jopa" ,"норм")
                             val isOnDetails = currentDestination?.route == Route.Details.path
                             navController.navigate(route.path) {
                                 if (isOnDetails) {
                                     popUpTo(Route.Details.path) { inclusive = true }
-                                    Log.println(Log.WARN, "jopa" ,"жопа")
                                 } else {
                                     popUpTo(navController.graph.startDestinationId) { saveState = true }
                                     restoreState = true
-                                    Log.println(Log.WARN, "jopa" ,"говно")
                                 }
                                 launchSingleTop = true
                             }

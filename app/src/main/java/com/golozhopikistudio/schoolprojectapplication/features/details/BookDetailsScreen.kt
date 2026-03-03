@@ -62,10 +62,11 @@ fun BookDetailsScreen(
 
     var showDeleteConfirmation by remember { mutableStateOf(false) }
     val book = uiState.book
+    val canDelete = showDeleteButton && uiState.isLibrarian
     val borrowedByOther = book?.isBorrowed == true && book.borrowerId != uiState.activeUserId
     val borrowedByCurrent = book?.isBorrowed == true && book.borrowerId == uiState.activeUserId
 
-    if (showDeleteButton && showDeleteConfirmation) {
+    if (canDelete && showDeleteConfirmation) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
             title = { Text("Удалить книгу?") },
@@ -190,7 +191,7 @@ fun BookDetailsScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        if (showDeleteButton) {
+        if (canDelete) {
             Button(
                 onClick = { showDeleteConfirmation = true },
                 enabled = book != null,

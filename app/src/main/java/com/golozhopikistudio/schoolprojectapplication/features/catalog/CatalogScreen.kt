@@ -2,7 +2,6 @@ package com.golozhopikistudio.schoolprojectapplication.features.catalog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,15 +35,16 @@ fun CatalogScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { showAddDialog = true }) {
-                Text("+")
-            }
+                if (uiState.canAddBook) {
+                    FloatingActionButton(onClick = { showAddDialog = true }) {
+                        Text("+")
+                    }
+                }
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
-                ,
+                .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             SearchBar(query = uiState.query, onQueryChange = viewModel::onQueryChange)

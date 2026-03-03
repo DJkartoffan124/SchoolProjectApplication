@@ -45,6 +45,11 @@ class LibraryRepositoryImpl(
     }
 
     override fun addManualBook(title: String, author: String) {
+
+        val current = state.value
+        val activeRole = current.users.find { it.id == current.activeUserId }?.role
+        if (activeRole != Role.LIBRARIAN) return
+
         val newBook = Book(
             id = UUID.randomUUID().toString(),
             title = title,
@@ -53,8 +58,8 @@ class LibraryRepositoryImpl(
         )
 
         updateState(
-            state.value.copy(
-                books = state.value.books + newBook
+            current.copy(
+                books = current.books + newBook
             )
         )
     }
@@ -110,6 +115,10 @@ class LibraryRepositoryImpl(
 
     override suspend fun importFromOpenLibrary(query: String, limit: Int): ImportResult {
         val current = state.value
+        val activeRole = current.users.find { it.id == current.activeUserId }?.role
+        if (activeRole != Role.LIBRARIAN) {
+            return ImportResult.Error("Недостаточно прав")
+        }
         val importedBooks = try {
             api.search(query).docs.map { it.toDomainBook() }
         } catch (_: Exception) {
@@ -145,6 +154,10 @@ class LibraryRepositoryImpl(
 
     override suspend fun deleteBook(bookId: String) {
         val current = state.value
+        val activeRole = current.users.find { it.id == current.activeUserId }?.role
+        if (activeRole != Role.LIBRARIAN) {
+            throw IllegalStateException("Недостаточно прав")
+        }
         val updatedBooks = current.books.filterNot { it.id == bookId }
         if (updatedBooks.size == current.books.size) return
 

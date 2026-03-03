@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
 import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
+import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,13 @@ class CatalogViewModel(private val repository: LibraryRepository) : ViewModel() 
                     ignoreCase = true
                 )
             }
-            CatalogUiState(query = searchQuery, books = filteredBooks)
+            CatalogUiState(
+                query = searchQuery,
+                books = filteredBooks,
+                canAddBook = appState.users
+                    .find { it.id == appState.activeUserId }
+                    ?.role == Role.LIBRARIAN
+            )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -45,5 +52,6 @@ class CatalogViewModel(private val repository: LibraryRepository) : ViewModel() 
 
 data class CatalogUiState(
     val query: String = "",
-    val books: List<Book> = emptyList()
+    val books: List<Book> = emptyList(),
+    val canAddBook: Boolean = false
 )

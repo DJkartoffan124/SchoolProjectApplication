@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
 import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
+import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
 import com.golozhopikistudio.schoolprojectapplication.domain.result.BorrowResult
 import com.golozhopikistudio.schoolprojectapplication.domain.result.ReturnResult
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,7 +38,10 @@ class DetailsViewModel(
                 isLoading = bookId == null,
                 errorMessage = error,
                 emptyMessage = emptyMessage,
-                activeUserId = appState.activeUserId
+                activeUserId = appState.activeUserId,
+                isLibrarian = appState.users
+                    .find { it.id == appState.activeUserId }
+                    ?.role == Role.LIBRARIAN
             )
         }.stateIn(
             scope = viewModelScope,
@@ -82,6 +86,11 @@ class DetailsViewModel(
     }
 
     private fun deleteBook() = viewModelScope.launch {
+        if (!state.value.isLibrarian) {
+            _effect.emit(DetailsEffect.ShowToast("Недостаточно прав"))
+            return@launch
+        }
+
         val bookId = selectedBookId.value ?: return@launch
 
         runCatching {
@@ -102,7 +111,8 @@ data class DetailsUiState(
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
     val emptyMessage: String? = null,
-    val activeUserId: String? = null
+    val activeUserId: String? = null,
+    val isLibrarian: Boolean = false
 )
 
 sealed interface DetailsEffect {
