@@ -32,6 +32,10 @@ class ProfileViewModel(private val repository: LibraryRepository) : ViewModel() 
     fun setActiveUser(user: User) {
         repository.setActiveUser(user.name, user.role)
     }
+    
+    fun deleteUser(user: User) {
+        repository.deleteUser(user.id)
+    }
 }
 
 

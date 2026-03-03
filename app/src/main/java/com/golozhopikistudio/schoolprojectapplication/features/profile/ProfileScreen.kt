@@ -110,11 +110,30 @@ fun ProfileScreen(
             }
         }
 
-        Button(
-            onClick = { selectedUser?.let(viewModel::setActiveUser) },
-            enabled = selectedUser != null
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Сделать активным")
+            Button(
+                onClick = { selectedUser?.let(viewModel::setActiveUser) },
+                enabled = selectedUser != null,
+                modifier = Modifier.weight(2f)
+            ) {
+                Text("Сделать активным")
+            }
+
+            Button(
+                onClick = {
+                    selectedUser?.let {
+                        viewModel.deleteUser(it)
+                        selectedUser = null
+                    }
+                },
+                enabled = selectedUser != null,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Удалить")
+            }
         }
     }
 }

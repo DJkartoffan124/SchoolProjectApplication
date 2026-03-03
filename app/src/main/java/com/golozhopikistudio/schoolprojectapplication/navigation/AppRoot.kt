@@ -29,15 +29,10 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
-                            val isOnDetails = currentDestination?.route == Route.Details.path
                             navController.navigate(route.path) {
-                                if (isOnDetails) {
-                                    popUpTo(Route.Details.path) { inclusive = true }
-                                } else {
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                    restoreState = true
-                                }
+                                popUpTo(navController.graph.startDestinationId) { saveState = true }
                                 launchSingleTop = true
+                                restoreState = true
                             }
                         },
                         icon = { Text(route.label.take(1)) },

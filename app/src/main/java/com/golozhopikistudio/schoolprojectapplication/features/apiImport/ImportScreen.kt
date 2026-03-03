@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -21,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
 @Composable
 fun ImportScreen(
     viewModel: ImportViewModel
@@ -50,7 +50,9 @@ fun ImportScreen(
         OutlinedTextField(
             value = query,
             onValueChange = { query = it },
-            label = { Text("Запрос") }
+            label = { Text("Запрос") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
@@ -64,12 +66,14 @@ fun ImportScreen(
                     Text("Введите целое число не меньше 1")
                 }
             },
-            singleLine = true
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
 
         Button(
             onClick = { viewModel.import(query, requestedCount!!) },
-            enabled = query.isNotBlank() && isCountValid && !uiState.isLoading
+            enabled = query.isNotBlank() && isCountValid && !uiState.isLoading,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Импорт")
         }

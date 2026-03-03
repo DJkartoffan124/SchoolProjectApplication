@@ -67,7 +67,8 @@ fun AppNavGraph(
                 onBack = {
                     if (!navController.popBackStack()) {
                         navController.navigate(sourceRoute) {
-                            launchSingleTop = true
+                            popUpTo(navController.graph.startDestinationId) { saveState = true }
+                            restoreState = true
                         }
                     }
                 },

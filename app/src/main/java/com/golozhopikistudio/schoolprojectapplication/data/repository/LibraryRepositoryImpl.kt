@@ -146,10 +146,26 @@ class LibraryRepositoryImpl(
                 history = current.history + historyItem
             )
         )
-
-        updateState(current.copy(books = current.books + uniqueBooks))
-
         return ImportResult.Success(uniqueBooks.size)
+    }
+
+    override fun deleteUser(userId: String) {
+        val current = state.value
+        val updatedUsers = current.users.filterNot { it.id == userId }
+        if (updatedUsers.size == current.users.size) return
+
+        val updatedActiveUserId = if (current.activeUserId == userId) {
+            updatedUsers.firstOrNull()?.id
+        } else {
+            current.activeUserId
+        }
+
+        updateState(
+            current.copy(
+                users = updatedUsers,
+                activeUserId = updatedActiveUserId
+            )
+        )
     }
 
     override suspend fun deleteBook(bookId: String) {
@@ -161,6 +177,10 @@ class LibraryRepositoryImpl(
         val updatedBooks = current.books.filterNot { it.id == bookId }
         if (updatedBooks.size == current.books.size) return
 
-        updateState(current.copy(books = updatedBooks))
+        updateState(
+            current.copy(
+                books = updatedBooks
+            )
+        )
     }
 }

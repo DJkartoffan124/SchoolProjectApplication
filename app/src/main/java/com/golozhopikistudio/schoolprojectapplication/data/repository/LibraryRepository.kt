@@ -19,6 +19,8 @@ interface LibraryRepository {
 
     fun returnBook(bookId: String): ReturnResult
 
+    fun deleteUser(userId: String)
+
     suspend fun importFromOpenLibrary(query: String, limit: Int): ImportResult
 
     suspend fun deleteBook(bookId: String)
