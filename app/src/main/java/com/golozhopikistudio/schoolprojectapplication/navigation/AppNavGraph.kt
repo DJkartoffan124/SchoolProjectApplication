@@ -1,6 +1,5 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,6 +20,7 @@ import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksSc
 import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksViewModel
 import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileScreen
 import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileViewModel
+
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
