@@ -9,8 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-
-class JournalViewModel(repository: LibraryRepository) : ViewModel() {
+class JournalViewModel(private val repository: LibraryRepository) : ViewModel() {
 
     val state: StateFlow<JournalUiState> = repository.state.map {
         JournalUiState(history = it.history)
@@ -19,6 +18,10 @@ class JournalViewModel(repository: LibraryRepository) : ViewModel() {
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = JournalUiState()
     )
+
+    fun clearHistory() {
+        repository.clearHistory()
+    }
 }
 
 data class JournalUiState(

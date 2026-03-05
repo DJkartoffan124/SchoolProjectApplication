@@ -1,9 +1,7 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -32,12 +30,12 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination,
-        modifier = Modifier.padding(contentPadding)
+        startDestination = startDestination
     ) {
         composable(Route.Catalog.path) {
             val vm: CatalogViewModel = viewModel(factory = viewModelFactory)
             CatalogScreen(
+                contentPadding = contentPadding,
                 onOpenDetails = { bookId ->
                     navController.navigate(
                         Route.Details.create(
@@ -64,6 +62,7 @@ fun AppNavGraph(
             val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
             BookDetailsScreen(
                 bookId = bookId,
+                contentPadding = contentPadding,
                 onBack = {
                     if (!navController.popBackStack()) {
                         navController.navigate(sourceRoute) {
@@ -80,6 +79,7 @@ fun AppNavGraph(
         composable(Route.MyBooks.path) {
             val vm: MyBooksViewModel = viewModel(factory = viewModelFactory)
             MyBooksScreen(
+                contentPadding = contentPadding,
                 viewModel = vm,
                 onOpenDetails = { bookId ->
                     navController.navigate(
@@ -93,15 +93,24 @@ fun AppNavGraph(
         }
         composable(Route.Journal.path) {
             val vm: JournalViewModel = viewModel(factory = viewModelFactory)
-            JournalScreen(viewModel = vm)
+            JournalScreen(
+                contentPadding = contentPadding,
+                viewModel = vm
+            )
         }
         composable(Route.Import.path) {
             val vm: ImportViewModel = viewModel(factory = viewModelFactory)
-            ImportScreen(viewModel = vm)
+            ImportScreen(
+                contentPadding = contentPadding,
+                viewModel = vm
+            )
         }
         composable(Route.Profile.path) {
             val vm: ProfileViewModel = viewModel(factory = viewModelFactory)
-            ProfileScreen(viewModel = vm)
+            ProfileScreen(
+                contentPadding = contentPadding,
+                viewModel = vm
+            )
         }
     }
 }

@@ -25,4 +25,6 @@ interface LibraryRepository {
 
     suspend fun deleteBook(bookId: String)
 
+    fun clearHistory()
+
 }

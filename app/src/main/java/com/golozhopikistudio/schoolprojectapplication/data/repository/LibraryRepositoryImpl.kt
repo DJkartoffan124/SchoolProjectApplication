@@ -120,7 +120,7 @@ class LibraryRepositoryImpl(
             return ImportResult.Error("Недостаточно прав")
         }
         val importedBooks = try {
-            api.search(query).docs.map { it.toDomainBook() }
+            api.search(query = query, limit = limit).docs.map { it.toDomainBook() }
         } catch (_: Exception) {
             return ImportResult.Error("Ошибка сети. Проверьте интернет-соединение")
         }
@@ -183,4 +183,10 @@ class LibraryRepositoryImpl(
             )
         )
     }
+
+    override fun clearHistory() {
+        val current = state.value
+        updateState(current.copy(history = emptyList()))
+    }
+
 }

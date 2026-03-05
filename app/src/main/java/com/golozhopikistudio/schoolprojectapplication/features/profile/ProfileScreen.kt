@@ -3,6 +3,7 @@ package com.golozhopikistudio.schoolprojectapplication.features.profile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,9 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +35,7 @@ import com.golozhopikistudio.schoolprojectapplication.domain.model.User
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    contentPadding: PaddingValues,
     viewModel: ProfileViewModel
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -42,97 +46,104 @@ fun ProfileScreen(
     }
     var expanded by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text(text = "Профили")
-        Text(text = "Активный: ${uiState.user?.name ?: "не выбран"}")
-
-        Text("Создание профиля")
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Имя профиля") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Text("Роль")
-        Role.entries.forEach { role ->
-            Row(modifier = Modifier.clickable { selectedRole = role }) {
-                RadioButton(selected = selectedRole == role, onClick = { selectedRole = role })
-                Text(role.label(), modifier = Modifier.padding(top = 12.dp))
-            }
+    Scaffold(
+        modifier = Modifier.padding(contentPadding),
+        topBar = {
+            TopAppBar(title = { Text("Профили") })
         }
-
-        Button(
-            onClick = {
-                viewModel.setActiveUser(name = name, role = selectedRole)
-                name = ""
-            },
-            enabled = name.isNotBlank()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Создать")
-        }
+            Text(text = "Активный: ${uiState.user?.name ?: "не выбран"}")
 
-        Text("Выбор профиля")
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
-        ) {
+            Text("Создание профиля")
             OutlinedTextField(
-                value = selectedUser?.let { "${it.name} • ${it.role.label()}" } ?: "",
-                onValueChange = {},
-                readOnly = true,
-                label = { Text("Профиль") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier
-                    .menuAnchor()
-                    .fillMaxWidth()
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Имя профиля") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                uiState.users.forEach { user ->
-                    DropdownMenuItem(
-                        text = { ProfileItem(user = user) },
-                        onClick = {
-                            selectedUser = user
-                            expanded = false
-                        }
-                    )
+            Text("Роль")
+            Role.entries.forEach { role ->
+                Row(modifier = Modifier.clickable { selectedRole = role }) {
+                    RadioButton(selected = selectedRole == role, onClick = { selectedRole = role })
+                    Text(role.label(), modifier = Modifier.padding(top = 12.dp))
                 }
-            }
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Button(
-                onClick = { selectedUser?.let(viewModel::setActiveUser) },
-                enabled = selectedUser != null,
-                modifier = Modifier.weight(2f)
-            ) {
-                Text("Сделать активным")
             }
 
             Button(
                 onClick = {
-                    selectedUser?.let {
-                        viewModel.deleteUser(it)
-                        selectedUser = null
-                    }
+                    viewModel.setActiveUser(name = name, role = selectedRole)
+                    name = ""
                 },
-                enabled = selectedUser != null,
-                modifier = Modifier.weight(1f)
+                enabled = name.isNotBlank()
             ) {
-                Text("Удалить")
+                Text("Создать")
+            }
+
+            Text("Выбор профиля")
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                OutlinedTextField(
+                    value = selectedUser?.let { "${it.name} • ${it.role.label()}" } ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Профиль") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    uiState.users.forEach { user ->
+                        DropdownMenuItem(
+                            text = { ProfileItem(user = user) },
+                            onClick = {
+                                selectedUser = user
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = { selectedUser?.let(viewModel::setActiveUser) },
+                    enabled = selectedUser != null,
+                    modifier = Modifier.weight(2f)
+                ) {
+                    Text("Сделать активным")
+                }
+
+                Button(
+                    onClick = {
+                        selectedUser?.let {
+                            viewModel.deleteUser(it)
+                            selectedUser = null
+                        }
+                    },
+                    enabled = selectedUser != null,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Удалить")
+                }
             }
         }
     }

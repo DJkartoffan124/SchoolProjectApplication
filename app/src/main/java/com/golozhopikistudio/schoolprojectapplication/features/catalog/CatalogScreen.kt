@@ -2,16 +2,19 @@ package com.golozhopikistudio.schoolprojectapplication.features.catalog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,8 +27,10 @@ import com.golozhopikistudio.schoolprojectapplication.core.ui.components.BookCar
 import com.golozhopikistudio.schoolprojectapplication.core.ui.components.EmptyState
 import com.golozhopikistudio.schoolprojectapplication.core.ui.components.SearchBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(
+    contentPadding: PaddingValues,
     onOpenDetails: (String) -> Unit,
     viewModel: CatalogViewModel
 ) {
@@ -35,6 +40,10 @@ fun CatalogScreen(
     var author by remember { mutableStateOf("") }
 
     Scaffold(
+        modifier = Modifier.padding(contentPadding),
+        topBar = {
+            TopAppBar(title = { Text("Каталог") })
+        },
         floatingActionButton = {
                 if (uiState.canAddBook) {
                     FloatingActionButton(onClick = { showAddDialog = true }) {

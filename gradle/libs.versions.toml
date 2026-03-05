@@ -1,6 +1,7 @@
 [versions]
 agp = "9.0.1"
 coilCompose = "2.6.0"
+composeBomVersion = "2024.02.00"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -16,8 +17,11 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 retrofitVersion = "2.11.0"
 navigationRuntimeKtx = "2.9.7"
 foundationLayout = "1.10.3"
+material3 = "1.4.0"
 
 [libraries]
+androidx-compose-bom-v20240200 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
@@ -37,10 +41,12 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+material3 = { module = "androidx.compose.material3:material3" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
