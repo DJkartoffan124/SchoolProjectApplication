@@ -26,7 +26,6 @@ fun AppNavGraph(
     navController: NavHostController,
     viewModelFactory: ViewModelProvider.Factory,
     startDestination: String = Route.Catalog.path,
-    contentPadding: PaddingValues = PaddingValues()
 ) {
     NavHost(
         navController = navController,
@@ -35,7 +34,6 @@ fun AppNavGraph(
         composable(Route.Catalog.path) {
             val vm: CatalogViewModel = viewModel(factory = viewModelFactory)
             CatalogScreen(
-                contentPadding = contentPadding,
                 onOpenDetails = { bookId ->
                     navController.navigate(
                         Route.Details.create(
@@ -62,7 +60,6 @@ fun AppNavGraph(
             val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
             BookDetailsScreen(
                 bookId = bookId,
-                contentPadding = contentPadding,
                 onBack = {
                     if (!navController.popBackStack()) {
                         navController.navigate(sourceRoute) {
@@ -79,7 +76,6 @@ fun AppNavGraph(
         composable(Route.MyBooks.path) {
             val vm: MyBooksViewModel = viewModel(factory = viewModelFactory)
             MyBooksScreen(
-                contentPadding = contentPadding,
                 viewModel = vm,
                 onOpenDetails = { bookId ->
                     navController.navigate(
@@ -94,21 +90,18 @@ fun AppNavGraph(
         composable(Route.Journal.path) {
             val vm: JournalViewModel = viewModel(factory = viewModelFactory)
             JournalScreen(
-                contentPadding = contentPadding,
                 viewModel = vm
             )
         }
         composable(Route.Import.path) {
             val vm: ImportViewModel = viewModel(factory = viewModelFactory)
             ImportScreen(
-                contentPadding = contentPadding,
                 viewModel = vm
             )
         }
         composable(Route.Profile.path) {
             val vm: ProfileViewModel = viewModel(factory = viewModelFactory)
             ProfileScreen(
-                contentPadding = contentPadding,
                 viewModel = vm
             )
         }

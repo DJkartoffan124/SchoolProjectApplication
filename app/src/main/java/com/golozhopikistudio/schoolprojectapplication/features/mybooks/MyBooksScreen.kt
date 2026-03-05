@@ -2,7 +2,6 @@ package com.golozhopikistudio.schoolprojectapplication.features.mybooks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,14 +21,12 @@ import com.golozhopikistudio.schoolprojectapplication.core.ui.components.EmptySt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBooksScreen(
-    contentPadding: PaddingValues,
     viewModel: MyBooksViewModel,
     onOpenDetails: (String) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = Modifier.padding(contentPadding),
         topBar = {
             TopAppBar(title = { Text("Мои книги") })
         }

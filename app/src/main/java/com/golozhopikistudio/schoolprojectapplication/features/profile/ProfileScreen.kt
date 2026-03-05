@@ -3,7 +3,6 @@ package com.golozhopikistudio.schoolprojectapplication.features.profile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +34,6 @@ import com.golozhopikistudio.schoolprojectapplication.domain.model.User
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    contentPadding: PaddingValues,
     viewModel: ProfileViewModel
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -47,7 +45,6 @@ fun ProfileScreen(
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.padding(contentPadding),
         topBar = {
             TopAppBar(title = { Text("Профили") })
         }

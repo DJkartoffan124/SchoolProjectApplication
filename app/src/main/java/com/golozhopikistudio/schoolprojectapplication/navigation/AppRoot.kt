@@ -1,5 +1,6 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -11,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.golozhopikistudio.schoolprojectapplication.core.ui.LibraryViewModelFactory
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
     val navController = rememberNavController()
@@ -29,6 +31,15 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = {
+                            val currentRoute = currentDestination?.route
+                            val isDetailsScreen = currentRoute?.startsWith("details/") == true
+                            val shouldReturnFromDetails =
+                                isDetailsScreen && (route == Route.Catalog || route == Route.MyBooks)
+
+                            if (shouldReturnFromDetails && navController.popBackStack(route.path, false)) {
+                                return@NavigationBarItem
+                            }
+
                             navController.navigate(route.path) {
                                 popUpTo(navController.graph.startDestinationId) { saveState = true }
                                 launchSingleTop = true
@@ -41,11 +52,10 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
                 }
             }
         }
-    ) { innerPadding ->
+    ) {
         AppNavGraph(
             navController = navController,
             viewModelFactory = viewModelFactory,
-            contentPadding = innerPadding
         )
     }
 }

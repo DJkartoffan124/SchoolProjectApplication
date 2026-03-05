@@ -3,7 +3,6 @@ package com.golozhopikistudio.schoolprojectapplication.features.details
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,7 +42,6 @@ import coil.compose.AsyncImage
 @Composable
 fun BookDetailsScreen(
     bookId: String,
-    contentPadding: PaddingValues,
     onBack: () -> Unit,
     viewModel: DetailsViewModel,
     showDeleteButton: Boolean = true
@@ -99,7 +97,6 @@ fun BookDetailsScreen(
         )
     }
     Scaffold(
-        modifier = Modifier.padding(contentPadding),
         topBar = {
             TopAppBar(
                 title = { Text("Детали книги") },

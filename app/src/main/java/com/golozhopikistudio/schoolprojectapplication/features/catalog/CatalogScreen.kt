@@ -2,7 +2,6 @@ package com.golozhopikistudio.schoolprojectapplication.features.catalog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +29,6 @@ import com.golozhopikistudio.schoolprojectapplication.core.ui.components.SearchB
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(
-    contentPadding: PaddingValues,
     onOpenDetails: (String) -> Unit,
     viewModel: CatalogViewModel
 ) {
@@ -40,16 +38,17 @@ fun CatalogScreen(
     var author by remember { mutableStateOf("") }
 
     Scaffold(
-        modifier = Modifier.padding(contentPadding),
         topBar = {
-            TopAppBar(title = { Text("Каталог") })
+            TopAppBar(
+                title = { Text("Каталог") }
+            )
         },
         floatingActionButton = {
-                if (uiState.canAddBook) {
-                    FloatingActionButton(onClick = { showAddDialog = true }) {
-                        Text("+")
-                    }
+            if (uiState.canAddBook) {
+                FloatingActionButton(onClick = { showAddDialog = true }) {
+                    Text("+")
                 }
+            }
         }
     ) { innerPadding ->
         Column(

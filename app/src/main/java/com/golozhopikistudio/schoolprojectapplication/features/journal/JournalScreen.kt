@@ -28,7 +28,6 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalScreen(
-    contentPadding: PaddingValues,
     viewModel: JournalViewModel
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -59,7 +58,6 @@ fun JournalScreen(
     }
 
     Scaffold(
-        modifier = Modifier.padding(contentPadding),
         topBar = {
             TopAppBar(
                 title = { Text("Журнал") },

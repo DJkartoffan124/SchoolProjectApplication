@@ -30,7 +30,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImportScreen(
-    contentPadding: PaddingValues,
     viewModel: ImportViewModel
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -49,7 +48,6 @@ fun ImportScreen(
     }
 
     Scaffold(
-        modifier = Modifier.padding(contentPadding),
         topBar = {
             TopAppBar(title = { Text("Импорт") })
         }
