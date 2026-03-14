@@ -189,4 +189,12 @@ class LibraryRepositoryImpl(
         updateState(current.copy(history = emptyList()))
     }
 
+    override fun clearCatalog() {
+        val current = state.value
+        val activeRole = current.users.find { it.id == current.activeUserId }?.role
+        if (activeRole != Role.LIBRARIAN) return
+
+        updateState(current.copy(books = emptyList()))
+    }
+
 }

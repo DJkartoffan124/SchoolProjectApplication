@@ -1,18 +1,19 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.golozhopikistudio.schoolprojectapplication.core.ui.LibraryViewModelFactory
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
     val navController = rememberNavController()
@@ -21,6 +22,7 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
     val tabs = listOf(Route.Catalog, Route.MyBooks, Route.Import, Route.Journal, Route.Profile)
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             NavigationBar {
                 tabs.forEach { route ->
@@ -52,8 +54,9 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
                 }
             }
         }
-    ) {
+    ) { innerPadding ->
         AppNavGraph(
+            modifier = Modifier.padding(innerPadding),
             navController = navController,
             viewModelFactory = viewModelFactory,
         )

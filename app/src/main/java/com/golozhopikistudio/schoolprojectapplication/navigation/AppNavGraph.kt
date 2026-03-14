@@ -1,6 +1,7 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -23,11 +24,13 @@ import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileVi
 
 @Composable
 fun AppNavGraph(
+    modifier: Modifier = Modifier,
     navController: NavHostController,
     viewModelFactory: ViewModelProvider.Factory,
     startDestination: String = Route.Catalog.path,
 ) {
     NavHost(
+        modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {

@@ -212,8 +212,6 @@ fun BookDetailsScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
             if (canDelete) {
                 Button(
                     onClick = { showDeleteConfirmation = true },

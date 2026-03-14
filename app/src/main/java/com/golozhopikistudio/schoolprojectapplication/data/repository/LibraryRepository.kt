@@ -27,4 +27,6 @@ interface LibraryRepository {
 
     fun clearHistory()
 
+    fun clearCatalog()
+
 }

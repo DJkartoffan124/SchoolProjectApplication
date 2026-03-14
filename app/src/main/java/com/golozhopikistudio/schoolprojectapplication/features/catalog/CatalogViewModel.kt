@@ -48,6 +48,10 @@ class CatalogViewModel(private val repository: LibraryRepository) : ViewModel() 
         repository.addManualBook(title = normalizedTitle, author = normalizedAuthor)
     }
 
+    fun clearCatalog() {
+        repository.clearCatalog()
+    }
+
 }
 
 data class CatalogUiState(
