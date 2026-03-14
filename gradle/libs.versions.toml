@@ -18,6 +18,7 @@ retrofitVersion = "2.11.0"
 navigationRuntimeKtx = "2.9.7"
 foundationLayout = "1.10.3"
 material3 = "1.4.0"
+uiUnit = "1.10.5"
 
 [libraries]
 androidx-compose-bom-v20240200 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
@@ -47,6 +48,7 @@ retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref =
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-compose-ui-unit = { group = "androidx.compose.ui", name = "ui-unit", version.ref = "uiUnit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

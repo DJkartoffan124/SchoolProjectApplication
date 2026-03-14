@@ -21,13 +21,15 @@ import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksSc
 import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksViewModel
 import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileScreen
 import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileViewModel
-
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 @Composable
 fun AppNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     viewModelFactory: ViewModelProvider.Factory,
     startDestination: String = Route.Catalog.path,
+    bottomInset: Dp = 0.dp,
 ) {
     NavHost(
         modifier = modifier,
@@ -37,6 +39,7 @@ fun AppNavGraph(
         composable(Route.Catalog.path) {
             val vm: CatalogViewModel = viewModel(factory = viewModelFactory)
             CatalogScreen(
+                bottomInset = bottomInset,
                 onOpenDetails = { bookId ->
                     navController.navigate(
                         Route.Details.create(
@@ -62,6 +65,7 @@ fun AppNavGraph(
 
             val vm: DetailsViewModel = viewModel(factory = viewModelFactory)
             BookDetailsScreen(
+                bottomInset = bottomInset,
                 bookId = bookId,
                 onBack = {
                     if (!navController.popBackStack()) {

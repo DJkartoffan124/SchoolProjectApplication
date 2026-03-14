@@ -3,7 +3,9 @@ package com.golozhopikistudio.schoolprojectapplication.features.catalog
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.golozhopikistudio.schoolprojectapplication.core.ui.components.BookCard
@@ -32,7 +35,8 @@ import com.golozhopikistudio.schoolprojectapplication.core.ui.components.SearchB
 @Composable
 fun CatalogScreen(
     onOpenDetails: (String) -> Unit,
-    viewModel: CatalogViewModel
+    viewModel: CatalogViewModel,
+    bottomInset: Dp = 0.dp
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     var showAddDialog by remember { mutableStateOf(false) }
@@ -48,7 +52,9 @@ fun CatalogScreen(
                         text = "Каталог",
                         modifier = Modifier.combinedClickable(
                             onClick = {},
-                            onLongClick = { showClearDialog = true }
+                            onLongClick = {
+                                if (uiState.canClearCatalog) showClearDialog = true
+                            }
                         )
                     )
                 }
@@ -74,7 +80,13 @@ fun CatalogScreen(
             if (uiState.books.isEmpty()) {
                 EmptyState(message = "Книги не найдены")
             } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(bottom = bottomInset)
+                ) {
                     items(uiState.books) { book ->
                         BookCard(book = book, onClick = { onOpenDetails(book.id) })
                     }
@@ -123,7 +135,7 @@ fun CatalogScreen(
             }
         )
     }
-    if (showClearDialog) {
+    if (uiState.canClearCatalog && showClearDialog) {
         AlertDialog(
             onDismissRequest = { showClearDialog = false },
             title = { Text("Очистить каталог?") },

@@ -1,14 +1,14 @@
 package com.golozhopikistudio.schoolprojectapplication.navigation
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -55,10 +55,12 @@ fun AppRoot(viewModelFactory: LibraryViewModelFactory) {
             }
         }
     ) { innerPadding ->
+        val bottomInset: Dp = innerPadding.calculateBottomPadding()
         AppNavGraph(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier,
             navController = navController,
             viewModelFactory = viewModelFactory,
+            bottomInset = bottomInset
         )
     }
 }

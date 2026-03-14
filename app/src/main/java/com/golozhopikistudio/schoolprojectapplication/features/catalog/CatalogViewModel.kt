@@ -24,12 +24,15 @@ class CatalogViewModel(private val repository: LibraryRepository) : ViewModel() 
                     ignoreCase = true
                 )
             }
+            val isLibrarian = appState.users
+                .find { it.id == appState.activeUserId }
+                ?.role == Role.LIBRARIAN
+
             CatalogUiState(
                 query = searchQuery,
                 books = filteredBooks,
-                canAddBook = appState.users
-                    .find { it.id == appState.activeUserId }
-                    ?.role == Role.LIBRARIAN
+                canAddBook = isLibrarian,
+                canClearCatalog = isLibrarian
             )
         }.stateIn(
             scope = viewModelScope,
@@ -57,5 +60,6 @@ class CatalogViewModel(private val repository: LibraryRepository) : ViewModel() 
 data class CatalogUiState(
     val query: String = "",
     val books: List<Book> = emptyList(),
-    val canAddBook: Boolean = false
+    val canAddBook: Boolean = false,
+    val canClearCatalog: Boolean = false
 )

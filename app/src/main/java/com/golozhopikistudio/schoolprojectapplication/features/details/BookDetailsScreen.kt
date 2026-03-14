@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -44,7 +45,8 @@ fun BookDetailsScreen(
     bookId: String,
     onBack: () -> Unit,
     viewModel: DetailsViewModel,
-    showDeleteButton: Boolean = true
+    showDeleteButton: Boolean = true,
+    bottomInset: Dp = 0.dp
 ) {
     val context = LocalContext.current
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -116,7 +118,8 @@ fun BookDetailsScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .padding(bottom = bottomInset),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             when {
