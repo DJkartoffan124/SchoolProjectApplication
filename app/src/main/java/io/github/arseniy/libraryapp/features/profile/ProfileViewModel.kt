@@ -12,6 +12,16 @@ import kotlinx.coroutines.flow.stateIn
 
 class ProfileViewModel(private val repository: LibraryRepository) : ViewModel() {
 
+    companion object {
+        fun canDeleteProfile(activeUser: User?, targetUser: User): Boolean {
+            return when (activeUser?.role) {
+                Role.LIBRARIAN -> true
+                Role.READER -> activeUser.id == targetUser.id
+                null -> false
+            }
+        }
+    }
+
     val state: StateFlow<ProfileUiState> = repository.state.map { appState ->
         val activeUser = appState.users.find { it.id == appState.activeUserId }
         ProfileUiState(
@@ -32,9 +42,16 @@ class ProfileViewModel(private val repository: LibraryRepository) : ViewModel() 
     fun setActiveUser(user: User) {
         repository.setActiveUser(user.name, user.role)
     }
-    
-    fun deleteUser(user: User) {
+
+    fun canDeleteUser(user: User): Boolean = canDeleteProfile(
+        activeUser = state.value.user,
+        targetUser = user
+    )
+
+    fun deleteUser(user: User): Boolean {
+        if (!canDeleteUser(user)) return false
         repository.deleteUser(user.id)
+        return true
     }
 }
 
