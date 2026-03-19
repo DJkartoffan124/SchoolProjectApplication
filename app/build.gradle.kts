@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.golozhopikistudio.schoolprojectapplication"
+        applicationId = "com.arseniy.libraryapp"
         minSdk = 34
         targetSdk = 36
         versionCode = 1
