@@ -28,8 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
-import com.golozhopikistudio.schoolprojectapplication.domain.model.User
+import io.github.arseniy.libraryapp.domain.model.Role
+import io.github.arseniy.libraryapp.domain.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

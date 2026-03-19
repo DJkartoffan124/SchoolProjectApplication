@@ -2,9 +2,10 @@ package io.github.arseniy.libraryapp.features.apiImport
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
-import com.golozhopikistudio.schoolprojectapplication.domain.result.ImportResult
+import io.github.arseniy.libraryapp.data.repository.LibraryRepository
+import io.github.arseniy.libraryapp.domain.model.Role
+import io.github.arseniy.libraryapp.domain.result.ImportResult
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

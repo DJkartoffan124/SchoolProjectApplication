@@ -2,8 +2,8 @@ package io.github.arseniy.libraryapp.features.mybooks
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
+import io.github.arseniy.libraryapp.data.repository.LibraryRepository
+import io.github.arseniy.libraryapp.domain.model.Book
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

@@ -2,13 +2,14 @@ package io.github.arseniy.libraryapp.core.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.golozhopikistudio.schoolprojectapplication.data.repository.LibraryRepository
-import com.golozhopikistudio.schoolprojectapplication.features.apiImport.ImportViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.catalog.CatalogViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.details.DetailsViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.journal.JournalViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileViewModel
+import io.github.arseniy.libraryapp.data.repository.LibraryRepository
+import io.github.arseniy.libraryapp.features.apiImport.ImportViewModel
+import io.github.arseniy.libraryapp.features.catalog.CatalogViewModel
+import io.github.arseniy.libraryapp.features.details.DetailsViewModel
+import io.github.arseniy.libraryapp.features.journal.JournalViewModel
+import io.github.arseniy.libraryapp.features.mybooks.MyBooksViewModel
+import io.github.arseniy.libraryapp.features.profile.ProfileViewModel
+
 
 class LibraryViewModelFactory(
     private val repository: LibraryRepository

@@ -1,17 +1,17 @@
 package io.github.arseniy.libraryapp.data.repository
 
-import com.golozhopikistudio.schoolprojectapplication.data.local.AppState
-import com.golozhopikistudio.schoolprojectapplication.data.local.JsonStore
-import com.golozhopikistudio.schoolprojectapplication.data.remote.OpenLibraryApi
-import com.golozhopikistudio.schoolprojectapplication.data.remote.mapper.toDomainBook
 
-
-import com.golozhopikistudio.schoolprojectapplication.domain.model.HistoryItem
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
-import com.golozhopikistudio.schoolprojectapplication.domain.model.User
-import com.golozhopikistudio.schoolprojectapplication.domain.result.BorrowResult
-import com.golozhopikistudio.schoolprojectapplication.domain.result.ImportResult
-import com.golozhopikistudio.schoolprojectapplication.domain.result.ReturnResult
+import io.github.arseniy.libraryapp.data.local.AppState
+import io.github.arseniy.libraryapp.data.local.JsonStore
+import io.github.arseniy.libraryapp.data.remote.OpenLibraryApi
+import io.github.arseniy.libraryapp.data.remote.mapper.toDomainBook
+import io.github.arseniy.libraryapp.domain.model.Book
+import io.github.arseniy.libraryapp.domain.model.HistoryItem
+import io.github.arseniy.libraryapp.domain.model.Role
+import io.github.arseniy.libraryapp.domain.model.User
+import io.github.arseniy.libraryapp.domain.result.BorrowResult
+import io.github.arseniy.libraryapp.domain.result.ImportResult
+import io.github.arseniy.libraryapp.domain.result.ReturnResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

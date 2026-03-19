@@ -1,10 +1,11 @@
 package io.github.arseniy.libraryapp.data.repository
 
-import com.golozhopikistudio.schoolprojectapplication.data.local.AppState
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Role
-import com.golozhopikistudio.schoolprojectapplication.domain.result.BorrowResult
-import com.golozhopikistudio.schoolprojectapplication.domain.result.ImportResult
-import com.golozhopikistudio.schoolprojectapplication.domain.result.ReturnResult
+
+import io.github.arseniy.libraryapp.data.local.AppState
+import io.github.arseniy.libraryapp.domain.model.Role
+import io.github.arseniy.libraryapp.domain.result.BorrowResult
+import io.github.arseniy.libraryapp.domain.result.ImportResult
+import io.github.arseniy.libraryapp.domain.result.ReturnResult
 import kotlinx.coroutines.flow.StateFlow
 
 interface LibraryRepository {

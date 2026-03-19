@@ -9,20 +9,21 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.golozhopikistudio.schoolprojectapplication.features.apiImport.ImportScreen
-import com.golozhopikistudio.schoolprojectapplication.features.apiImport.ImportViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.catalog.CatalogScreen
-import com.golozhopikistudio.schoolprojectapplication.features.catalog.CatalogViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.details.BookDetailsScreen
-import com.golozhopikistudio.schoolprojectapplication.features.details.DetailsViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.journal.JournalScreen
-import com.golozhopikistudio.schoolprojectapplication.features.journal.JournalViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksScreen
-import com.golozhopikistudio.schoolprojectapplication.features.mybooks.MyBooksViewModel
-import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileScreen
-import com.golozhopikistudio.schoolprojectapplication.features.profile.ProfileViewModel
+
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.arseniy.libraryapp.features.apiImport.ImportScreen
+import io.github.arseniy.libraryapp.features.apiImport.ImportViewModel
+import io.github.arseniy.libraryapp.features.catalog.CatalogScreen
+import io.github.arseniy.libraryapp.features.catalog.CatalogViewModel
+import io.github.arseniy.libraryapp.features.details.BookDetailsScreen
+import io.github.arseniy.libraryapp.features.details.DetailsViewModel
+import io.github.arseniy.libraryapp.features.journal.JournalScreen
+import io.github.arseniy.libraryapp.features.journal.JournalViewModel
+import io.github.arseniy.libraryapp.features.mybooks.MyBooksScreen
+import io.github.arseniy.libraryapp.features.mybooks.MyBooksViewModel
+import io.github.arseniy.libraryapp.features.profile.ProfileScreen
+import io.github.arseniy.libraryapp.features.profile.ProfileViewModel
 
 @Composable
 fun AppNavGraph(

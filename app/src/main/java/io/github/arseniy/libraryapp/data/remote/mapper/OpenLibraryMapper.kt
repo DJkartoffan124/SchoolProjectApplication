@@ -1,7 +1,8 @@
 package io.github.arseniy.libraryapp.data.remote.mapper
 
-import com.golozhopikistudio.schoolprojectapplication.data.remote.dto.OpenLibraryDocDto
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
+
+import io.github.arseniy.libraryapp.data.remote.dto.OpenLibraryDocDto
+import io.github.arseniy.libraryapp.domain.model.Book
 import java.util.UUID
 
 private fun coverUrl(coverId: Int): String =

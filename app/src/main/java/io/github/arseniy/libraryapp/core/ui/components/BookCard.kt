@@ -12,7 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
+import io.github.arseniy.libraryapp.domain.model.Book
+
 
 @Composable
 fun BookCard(

@@ -1,6 +1,7 @@
 package io.github.arseniy.libraryapp.data.remote
 
-import com.golozhopikistudio.schoolprojectapplication.data.remote.dto.OpenLibrarySearchResponseDto
+
+import io.github.arseniy.libraryapp.data.remote.dto.OpenLibrarySearchResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

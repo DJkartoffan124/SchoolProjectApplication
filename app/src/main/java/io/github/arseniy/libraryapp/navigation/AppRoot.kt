@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.golozhopikistudio.schoolprojectapplication.core.ui.LibraryViewModelFactory
+import io.github.arseniy.libraryapp.core.ui.LibraryViewModelFactory
 
 @Composable
 fun AppRoot(viewModelFactory: LibraryViewModelFactory) {

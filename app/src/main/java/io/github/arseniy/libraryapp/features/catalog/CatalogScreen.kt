@@ -26,9 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.golozhopikistudio.schoolprojectapplication.core.ui.components.BookCard
-import com.golozhopikistudio.schoolprojectapplication.core.ui.components.EmptyState
-import com.golozhopikistudio.schoolprojectapplication.core.ui.components.SearchBar
+import io.github.arseniy.libraryapp.core.ui.components.BookCard
+import io.github.arseniy.libraryapp.core.ui.components.EmptyState
+import io.github.arseniy.libraryapp.core.ui.components.SearchBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

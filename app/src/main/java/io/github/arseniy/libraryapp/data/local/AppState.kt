@@ -1,9 +1,9 @@
 package io.github.arseniy.libraryapp.data.local
 
 
-import com.golozhopikistudio.schoolprojectapplication.domain.model.Book
-import com.golozhopikistudio.schoolprojectapplication.domain.model.HistoryItem
-import com.golozhopikistudio.schoolprojectapplication.domain.model.User
+import io.github.arseniy.libraryapp.domain.model.Book
+import io.github.arseniy.libraryapp.domain.model.HistoryItem
+import io.github.arseniy.libraryapp.domain.model.User
 import kotlinx.serialization.Serializable
 
 
