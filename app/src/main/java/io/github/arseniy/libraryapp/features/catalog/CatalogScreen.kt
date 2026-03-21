@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -62,7 +64,12 @@ fun CatalogScreen(
         },
         floatingActionButton = {
             if (uiState.canAddBook) {
-                FloatingActionButton(onClick = { showAddDialog = true }) {
+                FloatingActionButton(
+                    onClick = { showAddDialog = true },
+                    modifier = Modifier
+                        .padding(bottom = bottomInset)
+                        .offset(y = 20.dp)
+                ) {
                     Text("+")
                 }
             }
